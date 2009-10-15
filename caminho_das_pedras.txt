@@ -1,0 +1,275 @@
+Explicação sobre rails generator
+
+jonatas@xonatax-mac:~/projetos/rails$ rails sorteio
+
+jonatas@xonatax-mac:~/projetos/rails$ cd sorteio/
+
+Explicação sobre a estrutura de diretórios
+
+Explicação sobre Rails Generators
+
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/generate scaffold participante nome:string
+
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/generate scaffold brinde descricao:string participante:references 
+
+Explicação sobre o rake e:
+
+rake db:migrate
+
+Testar o servidor 
+
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/console 
+Loading development environment (Rails 2.3.2)
+>> Rails.root
+=> #<Pathname:/Users/jonatas/projetos/rails/sorteio>
+>> Participante
+=> Participante(id: integer, nome: string, created_at: datetime, updated_at: datetime)
+>> Participante.all
+=> []
+>> Participante.first
+=> nil
+>> Participante.new :nome => "joao"
+=> #<Participante id: nil, nome: "joao", created_at: nil, updated_at: nil>
+>> Participante.create :nome => "joao"
+=> #<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+>> Participante.first
+=> #<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+>> Participante.all
+=> [#<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">]
+>> Participante.create :nome => "maria"
+=> #<Participante id: 2, nome: "maria", created_at: "2009-10-14 20:20:45", updated_at: "2009-10-14 20:20:45">
+>> Participante.all
+=> [#<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">, #<Participante id: 2, nome: "maria", created_at: "2009-10-14 20:20:45", updated_at: "2009-10-14 20:20:45">]
+>> Participante.last
+=> #<Participante id: 2, nome: "maria", created_at: "2009-10-14 20:20:45", updated_at: "2009-10-14 20:20:45">
+>> Participante.second
+NoMethodError: undefined method `second' for #<Class:0x27d0684>
+0x27d0684from /opt/local/lib/ruby/gems/1.8/gems/activerecord-2.3.2/lib/active_record/base.rb:1964:in `method_missing'
+method_missingfrom (irb):12
+>> Participante.all.second
+=> #<Participante id: 2, nome: "maria", created_at: "2009-10-14 20:20:45", updated_at: "2009-10-14 20:20:45">
+>> Participante
+=> Participante(id: integer, nome: string, created_at: datetime, updated_at: datetime)
+>> Participante.find_by_nome("joao")
+=> #<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+>> exit
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/dbconsole 
+SQLi Participante
+=> Participante(id: integer, nome: string, created_at: datetime, updated_at: datetime)
+>> Participante.find_by_nome("joao")
+=> #<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+>> exit
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/dbconsole 
+SQLite
+=> Participante(id: integer, nome: string, created_at: datetime, updated_at: datetime)
+>> Participante.find_by_nome("joao")
+=> #<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+>> exit
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/dbconsole 
+SQLite>                  html     HTML <table> code
+                         insert   SQL insert statements for TABLE
+                         line     One value per line
+                         list     Values delimited by .separator string
+                         tabs     Tab-separated values
+                         tcl      TCL list elements
+.nullvalue STRING      Print STRING in place of NULL values
+.output FILENAME       Send output to FILENAME
+.output stdout         Send output to the screen
+.prompt MAIN CONTINUE  Replace the standard prompts
+.quit                  Exit this program
+.read FILENAME         Execute SQL in FILENAME
+.schema ?TABLE?        Show the CREATE statements
+.separator STRING      Change separator used by output mode and .import
+.show                  Show the current values for various settings
+.tables ?PATTERN?      List names of tables matching a LIKE pattern
+.timeout MS            Try opening locked tables for MS milliseconds
+.width NUM NUM ...     Set column widths for "column" mode
+sqlite> .tables
+brindes            participantes      schema_migrations
+
+Cadastrar os participantes 
+
+Exibir a tela de brindes
+
+Exemplificar um CRUD
+
+Criar um exemplo de validação e validar o nome do participante
+
+entrar no model brinde:
+
+Exibir o belongs_to e explicar sobre o mapeamento objeto relacional
+
+Exibir no console a inserção ainda funciona
+
+Criar o método sortear
+
+Entrar no irb e mostrar o rand
+
+Fazer o método no irb
+
+Link para sortear o brinde
+
+
+      <% if brinde.participante.nil? %>
+        <%= link_to 'sortear', :action => 'sortear', :id => brinde.id %> 
+      <% else %>
+        <%=h brinde.participante %></td>
+      <% end %>
+
+Conceito modelo GORDO e vista magra
+
+
+Refatorando a view:
+
+  <td><%=h sortear_ou_exibir_ganhador_do(brinde) %></td>
+
+Criando o método correspondente:
+
+extraindo método com a 'lógica do negócio'
+
+module BrindesHelper
+  def sortear_ou_exibir_ganhador_do(brinde)
+     if brinde.participante.nil?
+       link_to 'sortear', :action => 'sortear', :id => brinde.id 
+     else 
+       h brinde.participante
+     end
+  end
+end
+
+
+cria o método no controller
+
+  def sortear
+    redirect_to brindes_path
+  end
+
+implementa a lógica do negócio no console
+<code>
+brinde.participante = Participante.all[rand(Participante.count)]
+#<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+brinde.save
+</code>
+
+exibe a list na tela do browser
+
+implementa o metodo to_s para dar uma desbaratinada
+
+regra de não permitir um ganhador ganhar dois premios
+
+implementa a regra:
+
+criar um método que identifica quem tem premio
+
+app/models/participante.rb
+
+class Participante < ActiveRecord::Base
+  has_one :brinde
+  def ganhou_brinde? 
+    !brinde.nil?
+  end
+end
+
+não aceitar participantes que já tenham ganhado prêmio para concorrer:
+
+# app/controllers/brindes_controller.rb
+
+  def sortear
+    participantes = Participante.all.reject{|participante| participante.ganhou_premio?}
+
+    if not participantes.empty?
+      brinde = Brinde.find(params[:id])
+      brinde.participante = participantes[rand(participantes.size)]
+      brinde.save
+    else
+      flash[:notice] = "Todos os participantes já ganharam brindes"
+    end
+
+    redirect_to brindes_path
+  end
+
+# testes do funcionamento pelo browser
+
+agora vamos fazer um refactor para manter o padrão MODEL GORDO e CONTROLLER MAGRO
+
+primeiro vamos criar um metodo para retornar apenas os participantes que não ganharam premio
+
+app/models/participante.rb
+
+  def self.que_nao_ganharam_brinde
+    all.reject{|participante| participante.ganhou_brinde?}
+  end
+
+
+ps: NOTE que o método acima é um método de classe e é definido por 
+
+  def self.que_nao_ganharam_brinde
+
+agora vamos criar um método para sortear o próprio brinde
+
+app/models/brinde.rb
+
+  def sortear!
+    participantes = Participante.que_nao_ganharam_brinde
+
+    if not participantes.empty?
+      update_attributes :participante_id => participantes[rand(participantes.size)].id
+    end
+  end
+
+
+para não ficar chato vamos falar um pouco do leiaute:
+
+app/views/layouts
+
+criar o leiaute application
+
+mostrar o flash[:notice]
+
+-> extrair um partial _form para o registro
+
+app/views/brindes/_form.html.erb
+
+  <p>
+    <%= f.label :descricao, 'Descrição' %><br />
+    <%= f.text_field :descricao %>
+  </p>
+
+e troca este pedaço de código que está em app/views/brindes/new.html.erb 
+e app/views/brindes/edit.html.erb por:
+
+  <%= render :partial => 'form', :locals => {:f => f} %>
+
+intro: validações
+
+adicionando umas validações legais para a descrição do brinde:
+
+  validates_presence_of :descricao, :message => "não pode ser vazia"
+  validates_length_of   :descricao, :maximum =>50, :minimun => 3, :message=> "deve estar entre 3 e 50"
+  validates_format_of   :descricao, :with => /\d+ ((\w+) ?)+/, :message => "deve ter uma quantidade na frente. ex: '3 caixas de cerveja'"
+  validates_uniqueness_of :descricao, :message => "já cadastrado!"
+
+
+Mostrar como é possível bloquear a tela e acabar não bloqueando o objeto
+Pegar um brinde sorteado e sortear novamente!
+
+  validate_on_update :nao_sorteia_um_brinde_ja_foi_sorteado, :if => lambda {|brinde| brinde.sorteado?}
+
+  def nao_sorteia_um_brinde_ja_foi_sorteado
+    self.errors.add_to_base "já foi sorteado" if participante_id_changed?
+  end
+
+  def sorteado?
+    ! participante.nil?
+  end
+
+  def sortear!
+    participantes = Participante.que_nao_ganharam_brinde
+
+    if not participantes.empty?
+      update_attributes :participante_id => participantes[rand(participantes.size)].id
+    end
+  end
+
+
+

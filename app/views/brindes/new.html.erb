@@ -1,0 +1,11 @@
+<h1>Novo brinde</h1>
+
+<% form_for(@brinde) do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <p>
+    <%= f.submit 'Adicionar Brinde' %>
+  </p>
+<% end %>
+
+<%= link_to 'Voltar para os brindes', brindes_path %>

@@ -1,0 +1,478 @@
+1.
+
+* Quem sou eu?
+   eu = { 
+      :nome => 'Jônatas Davi Paganini',
+      :email => 'jonatasdp@gmail.com',
+      :trabalho => {
+        :cargo => 'programador',
+        :experiência => 2.year,
+        :url => 'www.leosoft.com.br'
+      }
+   } 
+
+2.
+
+* Quem são vocês?
+** Quem programa aqui?
+** Que linguagens?
+** Para web?
+
+3.
+
+* Minha história com a web
+** Java
+
+4.
+
+* Minha história com rails
+** QUE MARAVILHA!
+
+5.
+
+* O que é Ruby?
+# PARA FAZER -> embute o pps da apresentação do ruby aqui 
+
+6.
+
+* O que é RubyGems
+
+Uma gema de ruby
+
+7. 
+
+* Exemplos de utilização do RubyGems
+
+gem install rails
+gem install brazilian-rails
+gem install mysql
+gem list 
+gem server
+
+6.
+
+* O que é Rails?
+
+** Confiança
+*** Quem usa?
+**** Twitter
+**** Basecamp 
+
+7.
+
+* O que é Rails?
+
+** Princípios
+*** DRY - Dont Repeat Yourself - Não se repita
+*** Convention Over Configuration - Convenção ao invés de configuração
+
+8.
+
+* O que é Rails?
+
+** Agilidade com Rake: Gerador de tarefas -> também é uma gem
+*** Rake para Ruby
+*** Make para C
+*** Ant para Java
+
+*** rake --tasks
+
+9.
+
+* O que é Rails?
+
+** Rails Generators - Geradores de código 
+** Prototipação
+
+*** para gerar código: 
+
+  syntaxe para linux ou mac:
+
+  script/generate nome_do_gerador nome_principal parametro=valor
+
+  syntaxe para windows:
+
+  ruby script\generate
+  
+  exemplos:
+
+  script/generate model participante nome:string telefone:string data_nascimento:date
+  script/generate model brinde descricao:string participante:references
+  script/generate controller participantes index new edit create delete 
+  script/generate migration add_email_to_participante email:string
+
+  script/generate scaffold participante nome:string telefone:string data_nascimento:date
+
+10.
+
+* O que é Rails?
+
+** Rails Generators - Geradores de código 
+  
+*** para destruir código gerado: 
+
+  script/destroy nome_do_gerador
+
+  exemplos:
+
+  script/destroy model participante 
+  script/destroy model brinde
+  script/destroy controller participantes 
+  script/destroy migration add_email_to_participante 
+
+  script/destroy scaffold participante 
+
+11.
+
+* O que é Rails?
+
+** Rails Generators - Geradores de código 
+
+ para criar um novo programa rails
+
+ rails nome_do_programa
+
+12.
+
+* O que é Rails?
+** Mais coisas legais
+*** Plugins - Extensibilidade
+*** script/* - Acessibilidade
+*** script/dbconsole # console sql -> exemplo comando mysql ou psql 
+*** script/console   # irb com as classes do projeto carregadas
+
+13.
+
+* Vamos usar ou não vamos este Rails?
+
+14.
+
+* Sistema de exemplo
+
+** Overview 
+*** Sistema para sortear brindes para os participantes do mini-curso.
+*** Entidade de brindes -> apenas o nome e o participante ganhador do brinde
+*** Entidade do participante -> apenas com o nome
+
+** Regras e características do sorteio 
+*** Brinde
+**** Pode pertencer apenas a um participante
+**** Deve ser cadastrado com uma descrição
+**** Deve ser sorteado apenas uma vez, não permitindo trocar o participante que ganhou o brinde.
+ 
+*** Participante 
+**** Pode ganhar apenas um brinde
+**** Deve ser cadastrado com um nome único
+
+15.
+
+* Mão na massa!
+
+16.
+
+$ rails sorteio
+$ cd sorteio/
+
+17. 
+
+* Estrutura de diretórios
+
+18. 
+
+* Banco de dados? qual?
+** config/database.yml
+
+19. 
+
+script/generate scaffold participante nome:string
+script/generate scaffold brinde descricao:string participante:references 
+
+20.
+
+* Executando as migrações:
+
+rake db:migrate
+
+21.
+
+Testar o console 
+
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/console 
+Loading development environment (Rails 2.3.2)
+>> Participante
+=> Participante(id: integer, nome: string, created_at: datetime, updated_at: datetime)
+>> Participante.all
+=> []
+>> Participante.first
+=> nil
+>> Participante.new :nome => "joao"
+=> #<Participante id: nil, nome: "joao", created_at: nil, updated_at: nil>
+
+22.
+
+Testar o console SQL
+
+jonatas@xonatax-mac:~/projetos/rails/sorteio$ script/dbconsole 
+sqlite> .tables
+brindes            participantes      schema_migrations
+.q
+
+23.
+
+* Testando na web
+** Tela de brindes
+** Tela de participantes
+
+24.
+
+* Tudo funcionando? Mas como?
+** Analisando o código gerado
+*** M de Modelo
+*** V de Visão
+*** C de Controlador
+
+25.  
+
+* Lembra da Regras do Sorteio?
+
+** Brinde
+*** Pode pertencer apenas a um participante
+*** Deve ser cadastrado com uma descrição
+*** Deve ser sorteado apenas uma vez, não permitindo trocar o participante que ganhou o brinde.
+
+** Participante 
+*** Pode ganhar apenas um brinde
+*** Deve ser cadastrado com um nome único
+
+26.
+
+* M de Model -> ActiveRecord::Base
+** Mapeador Objeto Relacional
+*** has_many
+*** belongs_to
+*** has_and_belongs_to_many 
+*** has_one
+** Validações 
+** Buscas Dinâmicas
+** Scopos 
+** Métodos dinâmicos
+
+27.
+
+* V de Visão -> ActionView::Base
+** compila arquivos com extensão .erb ou .rhtml
+** Usa <% %> e <%= %> como no jsp
+** Um monte de métodos legais para ser utilizados
+
+28.
+
+* C de controller -> ActionController::Base
+** Api principal para trabalhar com requisições HTTP no Rails
+
+29.
+
+* Quebrando a rotina - Cadê as validações? 
+** Validar unicidade e existência do nome do participante
+** Validar existência da descrição do brinde
+
+30.
+
+* Prosseguir Viagem 
+** Criar link para sortear o brinde
+*** app/views/brindes/index.html.erb
+*** retirar:
+
+<td><%=h brinde.participante %></td>
+
+*** colocar:
+<% if brinde.participante.nil? %>
+  <%= link_to 'sortear', :action => 'sortear', :id => brinde.id %> 
+<% else %>
+  <%=h brinde.participante %>
+<% end %>
+
+31.
+
+* Conceito modelo GORDO e visão magra
+
+32.
+
+* Refatorando a view:
+
+<td><%=h sortear_ou_exibir_ganhador_do(brinde) %></td>
+
+33.
+
+* Criando o método correspondente:
+
+extraindo método com a 'lógica do negócio'
+
+module BrindesHelper
+  def sortear_ou_exibir_ganhador_do(brinde)
+     if brinde.participante.nil?
+       link_to 'sortear', :action => 'sortear', :id => brinde.id 
+     else 
+       h brinde.participante
+     end
+  end
+end
+
+34.
+
+* criação do método que irá receber a requisição para sortear
+* por enquanto apenas redireciona para a listagem
+
+  def sortear
+    redirect_to brindes_path
+  end
+
+35.
+
+* implementa a lógica do negócio no console
+
+brinde.participante = Participante.all[rand(Participante.count)]
+#<Participante id: 1, nome: "joao", created_at: "2009-10-14 20:20:13", updated_at: "2009-10-14 20:20:13">
+brinde.save
+
+36.
+
+* vamos ver se funcionou na listagem 
+
+37.
+
+* implementação do método to_s para dar uma desbaratinada
+
+38.
+
+* Participante pode ganhar um brinde regra de não permitir um ganhador ganhar dois premios
+** criar um método que identifica quem tem premio
+
+app/models/participante.rb
+
+class Participante < ActiveRecord::Base
+  has_one :brinde
+  def ganhou_brinde? 
+    !brinde.nil?
+  end
+end
+
+39.
+
+* Implementar regra
+** Apenas um brinde por participante
+app/controllers/brindes_controller.rb
+
+  def sortear
+    participantes = Participante.all.reject{|participante| participante.ganhou_premio?}
+
+    if not participantes.empty?
+      brinde = Brinde.find(params[:id])
+      brinde.participante = participantes[rand(participantes.size)]
+      brinde.save
+    else
+      flash[:notice] = "Todos os participantes já ganharam brindes"
+    end
+
+    redirect_to brindes_path
+  end
+
+40.
+
+* mantendo a filosofia MODEL GORDO e CONTROLLER MAGRO
+
+** primeiro vamos criar um metodo para retornar apenas os participantes que não ganharam premio
+
+app/models/participante.rb
+
+  def self.que_nao_ganharam_brinde
+    all.reject{|participante| participante.ganhou_brinde?}
+  end
+
+ps: NOTE que o método acima é um método de classe e é definido por: 'def self.que_nao_ganharam_brinde'
+
+41. 
+
+* método que faz sortear o brinde para um participante
+
+app/models/brinde.rb
+
+  def sortear!
+    participantes = Participante.que_nao_ganharam_brinde
+
+    if not participantes.empty?
+      update_attributes :participante_id => participantes[rand(participantes.size)].id
+    end
+  end
+
+42.
+
+* layouts
+** application
+** específicos
+
+43.
+
+* partials - fragmentos de visão
+
+-> extrair um partial _form para o registro
+
+app/views/brindes/_form.html.erb
+
+  <p>
+    <%= f.label :descricao, 'Descrição' %><br />
+    <%= f.text_field :descricao %>
+  </p>
+
+e troca este pedaço de código que está em app/views/brindes/new.html.erb 
+e app/views/brindes/edit.html.erb por:
+
+  <%= render :partial => 'form', :locals => {:f => f} %>
+
+44.
+
+* mais sobre validações
+* adicionando umas validações legais para a descrição do brinde:
+
+  validates_presence_of :descricao, :message => "não pode ser vazia"
+  validates_length_of   :descricao, :maximum =>50, :minimun => 3, :message=> "deve estar entre 3 e 50"
+  validates_format_of   :descricao, :with => /\d+ ((\w+) ?)+/, :message => "deve ter uma quantidade na frente. ex: '3 caixas de cerveja'"
+  validates_uniqueness_of :descricao, :message => "já cadastrado!"
+
+
+45. 
+
+* Bug: o brinde pode ser sorteado quantas vezes quiser!
+
+46.
+
+  validate_on_update :nao_sorteia_um_brinde_ja_foi_sorteado, :if => lambda {|brinde| brinde.sorteado?}
+
+  def nao_sorteia_um_brinde_ja_foi_sorteado
+    self.errors.add_to_base "já foi sorteado" if participante_id_changed?
+  end
+
+  def sorteado?
+    ! participante.nil?
+  end
+
+  def sortear!
+    participantes = Participante.que_nao_ganharam_brinde
+
+    if not participantes.empty?
+      update_attributes :participante_id => participantes[rand(participantes.size)].id
+    end
+  end
+
+
+47.
+
+* Perguntas? 
+
+48.
+
+
+* Agradecimentos 
+** Alexsandra Medeiros - http://brasilcooperativo.ning.com/
+** Leosoft - http://www.leosoft.com.br
+
+

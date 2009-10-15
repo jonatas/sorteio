@@ -1,0 +1,22 @@
+<h1>Listagem de brindes</h1>
+
+<table>
+  <tr>
+    <th>Descrição</th>
+    <th>Ganhador</th>
+  </tr>
+
+<% @brindes.each do |brinde| %>
+  <tr>
+    <td><%=h brinde.descricao %></td>
+    <td><%= sortear_ou_exibir_ganhador_do(brinde) %></td>
+    <td><%= link_to 'Show', brinde %></td>
+    <td><%= link_to 'Edit', edit_brinde_path(brinde) %></td>
+    <td><%= link_to 'Destroy', brinde, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New brinde', new_brinde_path %>

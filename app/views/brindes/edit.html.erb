@@ -1,0 +1,12 @@
+<h1>Alterando dados do brinde</h1>
+
+<% form_for(@brinde) do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <p>
+    <%= f.submit 'Alterar brinde' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @brinde %> |
+<%= link_to 'Back', brindes_path %>

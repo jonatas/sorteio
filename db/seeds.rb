@@ -1,0 +1,6 @@
+Participante.find_or_create_by_nome("joao")
+Participante.find_or_create_by_nome("maria")
+Participante.find_or_create_by_nome("tereza")
+Brinde.find_or_create_by_descricao("1 caixa de cerveja")
+Brinde.find_or_create_by_descricao("1 galo de rinha")
+Brinde.find_or_create_by_descricao("2 leitão")
