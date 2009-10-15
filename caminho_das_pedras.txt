@@ -116,7 +116,7 @@ Link para sortear o brinde
         <%=h brinde.participante %></td>
       <% end %>
 
-Conceito modelo GORDO e vista magra
+Conceito modelo GORDO e controller magro
 
 
 Refatorando a view:
